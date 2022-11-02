@@ -14,8 +14,12 @@ class ApiController extends Controller
         $data = $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
+            'image'=> 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
+        $image = $request->file('image')->store('image','public');
+        $data['image'] = $image;
+        
 
         $data['password'] = bcrypt($request->password);
 
@@ -43,4 +47,5 @@ class ApiController extends Controller
         return response(['user' => auth()->user(), 'token' => $token]);
 
     }
+
 }
